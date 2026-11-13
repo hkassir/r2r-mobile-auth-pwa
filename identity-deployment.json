@@ -1,10 +1,10 @@
 {
-  "mode": "Neon-managed-auth-only",
+  "mode": "Neon-managed-member-workspace",
   "app": "mobile",
   "exactApprovedOrigin": "https://auth-mobile.intelligentradiology.ai",
-  "authorization": "NO R2R ROLES GRANTED: Neon Data API/RLS not activated",
+  "authorization": "Scoped Neon Data API RPCs check verified identity and active workspace membership",
   "source": "hkassir/R2R-Platform",
-  "originalFrontend": "unchanged",
+  "originalFrontend": "member workspace profile",
   "testData": "not shipped",
   "clinicalUse": "disabled"
 }
