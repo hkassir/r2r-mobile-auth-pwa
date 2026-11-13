@@ -26,20 +26,20 @@
     a { color:#1a62c6 }
     @media (max-width:550px) { main { margin:0; padding:22px; min-height:100vh; border:0; border-radius:0 } }
   </style>
-  <script type="module" crossorigin src="./assets/activate-DX2r_hW6.js"></script>
+  <script type="module" crossorigin src="./assets/activate--fnT9y20.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/neon-auth-ygjyFOIe-DwUQzO-9.js">
 </head>
 <body>
   <main>
     <header>INTELLIGENT RADIOLOGY · R2R</header>
-    <h1>Activate your account</h1>
-    <p>Complete Neon email verification and set your password securely. Your R2R permissions are reviewed separately from identity verification.</p>
+    <h1 id="page-title">Activate your account</h1>
+    <p id="page-intro">Complete Neon email verification and set your password securely. Your R2R permissions are reviewed separately from identity verification.</p>
 
     <section id="email-step" hidden>
       <form id="email-form" autocomplete="on">
         <label for="email">Your authorized email address</label>
         <input id="email" type="email" autocomplete="username" required maxlength="256" />
-        <button type="submit">Send verification code</button>
+        <button id="request-email-code" type="submit">Send verification code</button>
       </form>
     </section>
 
@@ -54,10 +54,10 @@
     </section>
 
     <section id="password-step" hidden>
-      <p>Email verified for <strong id="email-for-password"></strong>. Request a separate code to choose your password.</p>
+      <p><span id="password-intro">Email verified for</span> <strong id="email-for-password"></strong>. <span id="password-instructions">Request a separate code to choose your password.</span></p>
       <button id="request-password-code" type="button">Send password-setup code</button>
       <form id="password-form">
-        <label for="password-code">Password-setup code</label>
+        <label id="password-code-label" for="password-code">Password-setup code</label>
         <input id="password-code" inputmode="numeric" type="text" autocomplete="one-time-code" pattern="[0-9]{6,8}" minlength="6" maxlength="8" required />
         <label for="new-password">New password (at least 14 characters)</label>
         <input id="new-password" type="password" autocomplete="new-password" minlength="14" maxlength="128" required />
@@ -68,7 +68,7 @@
     </section>
 
     <section id="finished" hidden>
-      <p>Your password setup was accepted by the identity provider. Application access is available only after your profile and role are approved.</p>
+      <p id="finished-message">Your password setup was accepted by the identity provider. Application access is available only after your profile and role are approved.</p>
       <a id="return-to-signin" href="./">Return to R2R Sign In</a>
     </section>
 
