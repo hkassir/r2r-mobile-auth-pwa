@@ -1,0 +1,8 @@
+{
+  "profile": "r2r-mobile-auth",
+  "identity": "Neon Auth existing original sign-in/MFA components",
+  "access": "independent API required; roles verified server side",
+  "source": "R2R-Platform protected original Mobile UI",
+  "clinicalAccess": "not approved until verified backend and identity migration",
+  "releaseStatus": "candidate-only; not live operational certification"
+}

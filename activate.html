@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; connect-src 'self' https://*.neon.tech; style-src 'unsafe-inline'; form-action 'none'; base-uri 'none'; img-src 'self'; object-src 'none'; frame-src 'none';" />
+  <title>Activate R2R account — Intelligent Radiology</title>
+  <style>
+    :root { color-scheme:light; font:16px system-ui,-apple-system,'Segoe UI',sans-serif; color:#142944; background:#f3f6fa }
+    * { box-sizing:border-box }
+    main { max-width:510px; margin:6vh auto; padding:32px; border:1px solid #d5dfec; border-radius:12px; background:#fff; box-shadow:0 8px 28px #112e4e13 }
+    header { font-size:13px; font-weight:700; letter-spacing:.16em; margin-bottom:26px; color:#153458 }
+    h1 { font-size:27px; line-height:1.25; margin:0 0 12px; font-weight:600 }
+    p { line-height:1.6; color:#546a82; margin:0 0 18px }
+    label { font-size:14px; font-weight:650; display:block; margin:14px 0 6px }
+    input { width:100%; border:1px solid #a6b7cb; border-radius:7px; padding:12px; font-size:16px }
+    button { padding:12px 16px; margin-top:18px; border:0; border-radius:7px; background:#216fee; color:white; font-size:15px; font-weight:650; cursor:pointer }
+    button:disabled { opacity:.55; cursor:wait }
+    button.secondary { color:#174c92; background:#eaf2ff; margin-left:10px }
+    section[hidden] { display:none }
+    #message { min-height:24px; font-size:14px; line-height:1.5; margin:20px 0; color:#775016; white-space:pre-wrap }
+    #message[data-kind=success] { color:#176034 }
+    footer { border-top:1px solid #dbe4ef; margin-top:24px; padding-top:18px; color:#61748b; font-size:12px; line-height:1.6 }
+    a { color:#1a62c6 }
+    @media (max-width:550px) { main { margin:0; padding:22px; min-height:100vh; border:0; border-radius:0 } }
+  </style>
+  <script type="module" crossorigin src="./assets/activate-DX2r_hW6.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/neon-auth-ygjyFOIe-DwUQzO-9.js">
+</head>
+<body>
+  <main>
+    <header>INTELLIGENT RADIOLOGY · R2R</header>
+    <h1>Activate your account</h1>
+    <p>Complete Neon email verification and set your password securely. Your R2R permissions are reviewed separately from identity verification.</p>
+
+    <section id="email-step" hidden>
+      <form id="email-form" autocomplete="on">
+        <label for="email">Your authorized email address</label>
+        <input id="email" type="email" autocomplete="username" required maxlength="256" />
+        <button type="submit">Send verification code</button>
+      </form>
+    </section>
+
+    <section id="verify-step" hidden>
+      <p>A verification code was requested for <strong id="email-for-verify"></strong>.</p>
+      <form id="verify-form">
+        <label for="verify-code">Email verification code</label>
+        <input id="verify-code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6,8}" minlength="6" maxlength="8" required />
+        <button type="submit">Verify email</button>
+        <button id="resend-verification" class="secondary" type="button">Resend code</button>
+      </form>
+    </section>
+
+    <section id="password-step" hidden>
+      <p>Email verified for <strong id="email-for-password"></strong>. Request a separate code to choose your password.</p>
+      <button id="request-password-code" type="button">Send password-setup code</button>
+      <form id="password-form">
+        <label for="password-code">Password-setup code</label>
+        <input id="password-code" inputmode="numeric" type="text" autocomplete="one-time-code" pattern="[0-9]{6,8}" minlength="6" maxlength="8" required />
+        <label for="new-password">New password (at least 14 characters)</label>
+        <input id="new-password" type="password" autocomplete="new-password" minlength="14" maxlength="128" required />
+        <label for="confirm-password">Confirm new password</label>
+        <input id="confirm-password" type="password" autocomplete="new-password" minlength="14" maxlength="128" required />
+        <button type="submit">Set password</button>
+      </form>
+    </section>
+
+    <section id="finished" hidden>
+      <p>Your password setup was accepted by the identity provider. Application access is available only after your profile and role are approved.</p>
+      <a id="return-to-signin" href="./">Return to R2R Sign In</a>
+    </section>
+
+    <p id="message" role="status" aria-live="polite"></p>
+    <footer>
+      Do not share a verification code or password in chat, email replies or support tickets.
+      No clinical, credentialing or Manager permissions are granted by this page.
+    </footer>
+  </main>
+</body>
+</html>

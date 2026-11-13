@@ -1,0 +1,10 @@
+{
+  "mode": "Neon-managed-auth-only",
+  "app": "mobile",
+  "exactApprovedOrigin": "https://auth-mobile.intelligentradiology.ai",
+  "authorization": "NO R2R ROLES GRANTED: Neon Data API/RLS not activated",
+  "source": "hkassir/R2R-Platform",
+  "originalFrontend": "unchanged",
+  "testData": "not shipped",
+  "clinicalUse": "disabled"
+}
