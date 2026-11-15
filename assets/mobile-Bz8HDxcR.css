@@ -16,3 +16,7 @@
 @media (prefers-reduced-motion: reduce) {
   .r2r-auth-session-skeleton { animation: none; opacity: 1; }
 }
+
+/* No intermediate Mobile workspace/sign-in page is rendered during Neon session checks. */
+.r2r-auth-initial-blank { min-height: 100dvh; background: #fff; }
+.r2r-screen-reader-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
