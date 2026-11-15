@@ -1,0 +1,75 @@
+name: R2R Mobile staging QA — publish verified isolated SMS build
+on:
+  workflow_dispatch:
+    inputs:
+      artifact_url:
+        description: "Temporary signed URL for the verified R2R isolated QA artifact ZIP"
+        required: true
+        type: string
+      artifact_sha256:
+        description: "SHA-256 of the downloaded artifact ZIP"
+        required: true
+        type: string
+      source_sha:
+        description: "R2R-Platform candidate commit SHA for audit"
+        required: true
+        type: string
+permissions:
+  contents: write
+concurrency:
+  group: r2r-mobile-staging-qa-pages
+  cancel-in-progress: false
+jobs:
+  staging-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout existing staging GitHub Pages branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: gh-pages
+          fetch-depth: 1
+          persist-credentials: true
+      - name: Download and verify isolated QA artifact — no untrusted input execution
+        env:
+          ARTIFACT_URL: ${{ inputs.artifact_url }}
+          EXPECTED_SHA256: ${{ inputs.artifact_sha256 }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$ARTIFACT_URL" == https://sdmntprwestus3.oaiusercontent.com/files/*/raw\?* ]]
+          [[ "$EXPECTED_SHA256" =~ ^[0-9a-f]{64}$ ]]
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          curl --fail --silent --show-error --location --max-time 45 "$ARTIFACT_URL" -o "$RUNNER_TEMP/r2r-qa.zip"
+          test "$(stat -c%s "$RUNNER_TEMP/r2r-qa.zip")" -lt 3000000
+          printf '%s  %s\n' "$EXPECTED_SHA256" "$RUNNER_TEMP/r2r-qa.zip" | sha256sum -c -
+          unzip -tqq "$RUNNER_TEMP/r2r-qa.zip"
+          if unzip -Z -1 "$RUNNER_TEMP/r2r-qa.zip" | grep -E '(^/|(^|/)\.\.(/|$))'; then
+            echo 'Unsafe path in artifact ZIP'; exit 1
+          fi
+          mkdir -p "$RUNNER_TEMP/qa-site"
+          unzip -q "$RUNNER_TEMP/r2r-qa.zip" -d "$RUNNER_TEMP/qa-site"
+          test -f "$RUNNER_TEMP/qa-site/QA-ONLY-NOT-PUBLISHED.json"
+          test ! -e "$RUNNER_TEMP/qa-site/tester"
+          test -f "$RUNNER_TEMP/qa-site/index.html"
+          test -f "$RUNNER_TEMP/qa-site/activate.html"
+          test -f "$RUNNER_TEMP/qa-site/authentication-profile.json"
+          grep -R -Fq 'ep-solitary-snow-bfkcrxa7.neonauth.c-5.us-west-2.aws.neon.tech' "$RUNNER_TEMP/qa-site/assets/"
+          grep -R -Fq 'br-blue-breeze-bein7fgf-mobilesms.compute.c-9.us-east-2.aws.neon.tech' "$RUNNER_TEMP/qa-site/assets/"
+          if grep -R -Eq 'ep-crimson-voice-bfh3dryw|br-still-resonance-beyrpb30|proxy-v2.appdeploy.ai' "$RUNNER_TEMP/qa-site/assets/"; then
+            echo 'Wrong environment in staging QA candidate'; exit 1
+          fi
+          rm "$RUNNER_TEMP/qa-site/QA-ONLY-NOT-PUBLISHED.json"
+          printf '{"environment":"staging-qa","clinicalAccess":false,"backend":"isolated-neon-qa","sourceSha":"%s"}\n' "$SOURCE_SHA" > "$RUNNER_TEMP/qa-site/STAGING-TEST-DEPLOYMENT.json"
+          touch "$RUNNER_TEMP/qa-site/.nojekyll"
+          echo "ROLLBACK_COMMIT=$(git rev-parse HEAD)"
+          rsync -rltD --delete --exclude='.git/' --exclude='.github/' --exclude='CNAME' "$RUNNER_TEMP/qa-site/" ./
+          git config user.name "R2R Staging Pages Bot"
+          git config user.email "r2r-staging-pages@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish isolated R2R Mobile staging QA ${SOURCE_SHA}" > /dev/null
+            git push origin HEAD:gh-pages
+          fi
+          echo "STAGING_PUBLISHED_COMMIT=$(git rev-parse HEAD)"
+          echo "STAGING_URL=https://auth-mobile.intelligentradiology.ai/"
